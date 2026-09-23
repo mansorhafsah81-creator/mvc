@@ -1,0 +1,446 @@
+@{
+    ViewData["Title"] = "الرئيسية - نظام حجز القاعات";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <!-- استدعاء الخط والأيقونات -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                font-family: 'Cairo', sans-serif;
+            }
+
+            body {
+                background-color: #f8f9fa;
+                display: flex;
+                height: 100vh;
+                overflow: hidden;
+                direction: rtl;
+                text-align: right;
+            }
+
+            /* القائمة الجانبية في اليمين */
+            .sidebar {
+                width: 260px;
+                background-color: #071933;
+                color: #fff;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                padding: 20px 0;
+                flex-shrink: 0;
+            }
+
+            .sidebar-top .user-profile {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 0 20px 20px 20px;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                margin-bottom: 15px;
+            }
+
+            .user-avatar {
+                width: 40px;
+                height: 40px;
+                background: #e2e8f0;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #333;
+                font-size: 18px;
+            }
+
+            .user-info h4 {
+                font-size: 14px;
+                font-weight: 700;
+                color: #fff;
+            }
+
+            .user-info span {
+                font-size: 11px;
+                color: #a0aec0;
+            }
+
+            .sidebar-menu {
+                list-style: none;
+                padding: 0 10px;
+            }
+
+                .sidebar-menu li {
+                    margin-bottom: 5px;
+                }
+
+                .sidebar-menu a {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 12px 15px;
+                    color: #cbd5e1;
+                    text-decoration: none;
+                    font-size: 13px;
+                    border-radius: 8px;
+                    transition: 0.2s;
+                }
+
+                    .sidebar-menu a:hover, .sidebar-menu li.active a {
+                        background-color: #0b2545;
+                        color: #fff;
+                    }
+
+                .sidebar-menu i {
+                    font-size: 16px;
+                }
+
+            /* المحتوى الرئيسي في اليسار */
+            .main-content {
+                flex: 1;
+                padding: 30px;
+                overflow-y: auto;
+                background-color: #fcfcfc;
+            }
+
+            .header-title {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 25px;
+            }
+
+                .header-title h2 {
+                    font-size: 20px;
+                    font-weight: 700;
+                    color: #111;
+                }
+
+            .welcome-section {
+                margin-bottom: 25px;
+            }
+
+                .welcome-section h3 {
+                    font-size: 18px;
+                    font-weight: 700;
+                    color: #111;
+                    margin-bottom: 5px;
+                }
+
+                .welcome-section p {
+                    color: #6c757d;
+                    font-size: 13px;
+                }
+
+            /* بطاقات الإحصائيات العلوية (من اليمين لليسار) */
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 15px;
+                margin-bottom: 25px;
+            }
+
+            .stat-card {
+                background: #fff;
+                padding: 18px;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+                border: 1px solid #eee;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+                .stat-card .top-info {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 12px;
+                }
+
+                .stat-card span {
+                    font-size: 12px;
+                    color: #6c757d;
+                    font-weight: 600;
+                }
+
+                .stat-card .number {
+                    font-size: 22px;
+                    font-weight: 700;
+                    color: #111;
+                }
+
+            .stat-icon {
+                width: 34px;
+                height: 34px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 15px;
+            }
+
+            /* ألوان أيقونات الإحصائيات */
+            .bg-blue-light {
+                background: #e7f1ff;
+                color: #0d6efd;
+            }
+
+            .bg-purple-light {
+                background: #f3e8ff;
+                color: #6f42c1;
+            }
+
+            .bg-green-light {
+                background: #d1e7dd;
+                color: #198754;
+            }
+
+            .bg-orange-light {
+                background: #ffe5d0;
+                color: #fd7e14;
+            }
+
+            .section-title {
+                font-size: 15px;
+                font-weight: 700;
+                color: #111;
+                margin-bottom: 12px;
+            }
+
+            /* الخدمات السريعة */
+            .services-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px;
+                margin-bottom: 25px;
+            }
+
+            .service-card {
+                background: #fff;
+                padding: 20px 15px;
+                border-radius: 12px;
+                text-align: center;
+                border: 1px solid #eee;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+                cursor: pointer;
+                transition: 0.2s;
+                text-decoration: none;
+                display: block;
+            }
+
+                .service-card:hover {
+                    border-color: #0d6efd;
+                }
+
+                .service-card i {
+                    font-size: 22px;
+                    color: #0d6efd;
+                    margin-bottom: 8px;
+                    display: block;
+                }
+
+                .service-card h4 {
+                    font-size: 13px;
+                    font-weight: 700;
+                    color: #111;
+                    margin-bottom: 4px;
+                }
+
+                .service-card p {
+                    font-size: 11px;
+                    color: #6c757d;
+                }
+
+            /* أحدث الإشعارات */
+            .notifications-box {
+                background: #fff;
+                border-radius: 12px;
+                border: 1px solid #eee;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+                overflow: hidden;
+            }
+
+            .notification-item {
+                padding: 14px 18px;
+                border-bottom: 1px solid #f1f1f1;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+                .notification-item:last-child {
+                    border-bottom: none;
+                }
+
+            .notification-content {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .notification-text h5 {
+                font-size: 12px;
+                font-weight: 700;
+                color: #111;
+            }
+
+            .notification-text span {
+                font-size: 10px;
+                color: #999;
+            }
+    </style>
+</head>
+<body>
+
+    <!-- القائمة الجانبية في اليمين -->
+    <div class="sidebar">
+        <div class="sidebar-top">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <div class="user-info">
+                    <h4>أحمد محمد</h4>
+                    <span>طالب</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li class="active">
+                    <a href="/account/dashboard"><i class="bi bi-house-door"></i> الرئيسية</a>
+                </li>
+                <li>
+                    <a href="/account/halls"><i class="bi bi-grid"></i> القاعات</a>
+                </li>
+                <li>
+                    <a href="/Account/Bookings"><i class="bi bi-calendar-check"></i> حجوزاتي</a>
+                </li>
+                <li>
+                    <a href="#"><i class="bi bi-bell"></i> الإشعارات</a>
+                </li>
+                <li>
+                    <a href="#"><i class="bi bi-person"></i> الملف الشخصي</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-bottom">
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="/account/login"><i class="bi bi-box-arrow-right"></i> تسجيل خروج</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- المحتوى الرئيسي في اليسار -->
+    <div class="main-content">
+        <div class="header-title">
+            <h2>الرئيسية</h2>
+            <i class="bi bi-share" style="cursor: pointer; color: #555;"></i>
+        </div>
+
+        <div class="welcome-section">
+            <h3>مرحباً بك، أحمد 👋</h3>
+            <p>احجز قاعاتك بسهولة وتنظيم</p>
+        </div>
+
+        <!-- الإحصائيات -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="top-info">
+                    <span>إجمالي الحجوزات</span>
+                    <div class="stat-icon bg-blue-light"><i class="bi bi-calendar-check"></i></div>
+                </div>
+                <div class="number">12</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="top-info">
+                    <span>الحجوزات القادمة</span>
+                    <div class="stat-icon bg-green-light"><i class="bi bi-clock-history"></i></div>
+                </div>
+                <div class="number">3</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="top-info">
+                    <span>القاعات المتاحة</span>
+                    <div class="stat-icon bg-purple-light"><i class="bi bi-door-open"></i></div>
+                </div>
+                <div class="number">8</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="top-info">
+                    <span>الإشعارات الجديدة</span>
+                    <div class="stat-icon bg-orange-light"><i class="bi bi-bell"></i></div>
+                </div>
+                <div class="number">5</div>
+            </div>
+        </div>
+
+        <div class="section-title">خدمات سريعة</div>
+
+        <!-- الخدمات السريعة -->
+        <div class="services-grid">
+            <a href="/Account/Halls" class="service-card">
+                <i class="bi bi-door-closed"></i>
+                <h4>عرض القاعات</h4>
+                <p>استعراض القاعات المتاحة</p>
+            </a>
+
+            <a href="/Account/AddHall" class="service-card" style="border-color: #d1fae5;">
+                <i class="bi bi-plus-circle" style="color: #10b981;"></i>
+                <h4>إضافة قاعة جديدة</h4>
+                <p>إضافة قاعة متزامنة مع فلاتر</p>
+            </a>
+
+            <a href="/Account/Bookings" class="service-card">
+                <i class="bi bi-journal-text"></i>
+                <h4>حجوزاتي</h4>
+                <p>عرض وإدارة الحجوزات</p>
+            </a>
+        </div>
+
+        <div class="section-title">أحدث الإشعارات</div>
+
+        <!-- أحدث الإشعارات -->
+        <div class="notifications-box">
+            <div class="notification-item">
+                <div class="notification-content">
+                    <i class="bi bi-check-circle-fill" style="color: #198754; font-size: 16px;"></i>
+                    <div class="notification-text">
+                        <h5>تم تأكيد حجز قاعة 101</h5>
+                        <span>منذ 10 دقائق</span>
+                    </div>
+                </div>
+                <i class="bi bi-chevron-left" style="color: #ccc; font-size: 11px;"></i>
+            </div>
+
+            <div class="notification-item">
+                <div class="notification-content">
+                    <i class="bi bi-x-circle-fill" style="color: #dc3545; font-size: 16px;"></i>
+                    <div class="notification-text">
+                        <h5>تم إلغاء حجز قاعة 202</h5>
+                        <span>منذ ساعة مضت</span>
+                    </div>
+                </div>
+                <i class="bi bi-chevron-left" style="color: #ccc; font-size: 11px;"></i>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+

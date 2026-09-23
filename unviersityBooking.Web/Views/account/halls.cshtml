@@ -1,0 +1,464 @@
+@model IEnumerable<universityBooking.Application.DTOs.HallDto>
+
+@{
+    ViewData["Title"] = "القاعات - نظام حجز القاعات";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            direction: rtl;
+            text-align: right;
+        }
+
+        .sidebar {
+            width: 260px;
+            background-color: #071933;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px 0;
+            flex-shrink: 0;
+        }
+
+        .sidebar-top .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 20px 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .user-info h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .user-info span {
+            font-size: 11px;
+            color: #a0aec0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0 10px;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 13px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu li.active a {
+            background-color: #0b2545;
+            color: #fff;
+        }
+
+        .sidebar-bottom {
+            padding: 0 10px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 25px 30px;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-header h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0b2545;
+        }
+
+        .btn-add-hall {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #1e3a8a;
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn-add-hall:hover {
+            background-color: #172554;
+        }
+
+        .halls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .hall-card {
+            background: #fff;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .hall-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+
+        .hall-img-container {
+            width: 100%;
+            height: 160px;
+            overflow: hidden;
+            position: relative;
+            background-color: #e2e8f0;
+        }
+
+        .hall-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hall-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .badge-available {
+            background-color: #dcfce7;
+            color: #15803d;
+        }
+
+        .badge-booked {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .hall-info {
+            padding: 16px;
+        }
+
+        .hall-info h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0b2545;
+            margin-bottom: 6px;
+        }
+
+        .hall-meta {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .booking-details-box {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            border-right: 3px solid #ef4444;
+            font-size: 11px;
+            color: #334155;
+        }
+
+        .booking-details-box div {
+            margin-bottom: 3px;
+        }
+
+        .card-actions {
+            padding: 0 16px 16px 16px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .details-btn {
+            flex: 1;
+            display: inline-block;
+            text-align: center;
+            padding: 9px;
+            background-color: #1e3a8a;
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .details-btn:hover {
+            background-color: #172554;
+        }
+
+        .cancel-btn {
+            flex: 1;
+            padding: 9px;
+            background-color: #ef4444;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .cancel-btn:hover {
+            background-color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-top">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <div class="user-info">
+                    <h4>حفصة منصور</h4>
+                    <span>طالبة</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="/Account/Dashboard"><i class="bi bi-house-door"></i> الرئيسية</a>
+                </li>
+                <li class="active">
+                    <a href="/Account/Halls"><i class="bi bi-grid"></i> القاعات</a>
+                </li>
+                <li>
+                    <a href="/Account/Bookings"><i class="bi bi-calendar-check"></i> حجوزاتي</a>
+                </li>
+                <li>
+                    <a href="#"><i class="bi bi-bell"></i> الإشعارات</a>
+                </li>
+                <li>
+                    <a href="#"><i class="bi bi-person"></i> الملف الشخصي</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-bottom">
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="/Account/Login"><i class="bi bi-box-arrow-right"></i> تسجيل خروج</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div style="background-color: #dcfce7; color: #15803d; padding: 12px 18px; border-radius: 8px; margin-bottom: 20px; font-weight: 600; display: flex; align-items: center; gap: 8px; border: 1px solid #bbf7d0;">
+                <i class="bi bi-check-circle-fill" style="font-size: 18px;"></i> @TempData["SuccessMessage"]
+            </div>
+        }
+
+        <div class="page-header">
+            <div>
+                <h2>دليل القاعات الجامعية</h2>
+                <span style="font-size: 12px; color: #64748b;">تحديث فوري للقاعات وحالات الحجز متزامن 100% مع تطبيق فلاتر</span>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <a href="/Account/AddHall" class="btn-add-hall" style="background-color: #10b981;">
+                    <i class="bi bi-plus-circle-fill"></i> إضافة قاعة جديدة
+                </a>
+                <a href="/Account/BookingHall" class="btn-add-hall">
+                    <i class="bi bi-calendar-plus"></i> حجز قاعة
+                </a>
+            </div>
+        </div>
+
+        <div class="halls-grid">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var hall in Model)
+                {
+                    string displayImg = "/images/hall1.jpg";
+                    if (!string.IsNullOrWhiteSpace(hall.Image))
+                    {
+                        string img = hall.Image.Trim();
+                        if (img.StartsWith("data:image"))
+                        {
+                            displayImg = img;
+                        }
+                        else if (img.StartsWith("http://") || img.StartsWith("https://"))
+                        {
+                            displayImg = img;
+                        }
+                        else if (img.Contains("1.jpg"))
+                        {
+                            displayImg = "/images/1.jpg";
+                        }
+                        else if (img.Contains("202"))
+                        {
+                            displayImg = "/images/hall2.jpg";
+                        }
+                        else if (img.Contains("303"))
+                        {
+                            displayImg = "/images/hall3.jpg";
+                        }
+                        else if (img.Contains("404") || img.Contains("101"))
+                        {
+                            displayImg = "/images/hall1.jpg";
+                        }
+                        else if (img.StartsWith("images/") || img.StartsWith("/images/"))
+                        {
+                            displayImg = "/" + img.TrimStart('/');
+                        }
+                        else
+                        {
+                            displayImg = "/" + img.TrimStart('/');
+                        }
+                    }
+
+                    <div class="hall-card">
+                        <div>
+                            <div class="hall-img-container">
+                                <img src="@displayImg" alt="@hall.Name" onerror="this.src='/images/hall1.jpg';" />
+                                @if (hall.IsBooked)
+                                {
+                                    <span class="hall-badge badge-booked"><i class="bi bi-lock-fill"></i> محجوزة</span>
+                                }
+                                else
+                                {
+                                    <span class="hall-badge badge-available"><i class="bi bi-check-circle-fill"></i> متاحة</span>
+                                }
+                            </div>
+                            <div class="hall-info">
+                                <h4>@hall.Name</h4>
+                                <div class="hall-meta"><i class="bi bi-building"></i> @hall.Building</div>
+                                <div class="hall-meta"><i class="bi bi-people"></i> السعة: @hall.Capacity شخص</div>
+                                @if (!string.IsNullOrWhiteSpace(hall.Details))
+                                {
+                                    <div class="hall-meta" style="color: #475569; margin-top: 4px; font-size: 11px;">
+                                        <i class="bi bi-card-text"></i> @hall.Details
+                                    </div>
+                                }
+
+                                @if (hall.IsBooked)
+                                {
+                                    <div class="booking-details-box">
+                                        <div><strong>الحاجز:</strong> @hall.BookedBy</div>
+                                        <div><strong>الغرض:</strong> @hall.BookingPurpose</div>
+                                        <div><strong>التاريخ:</strong> @hall.BookingDate</div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="card-actions" style="flex-direction: column; gap: 8px;">
+                            <div style="display: flex; gap: 8px; width: 100%;">
+                                @if (hall.IsBooked && hall.ActiveBookingId.HasValue)
+                                {
+                                    <form asp-action="CancelBookingFromHalls" method="post" style="flex: 1;" onsubmit="return confirm('هل تريد إلغاء حجز هذه القاعة وإعادتها متاحة؟');">
+                                        <input type="hidden" name="id" value="@hall.ActiveBookingId.Value" />
+                                        <button type="submit" class="cancel-btn" style="width: 100%;">
+                                            <i class="bi bi-x-circle"></i> إلغاء الحجز
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <a href="/Account/BookingHall?hallId=@hall.Id" class="details-btn" style="flex: 1;">
+                                        <i class="bi bi-calendar-plus"></i> احجز الآن
+                                    </a>
+                                }
+                            </div>
+
+                            <form asp-action="DeleteHall" method="post" style="width: 100%;" onsubmit="return confirm('هل أنت متأكد من رغبتك في حذف @hall.Name نهائياً من قاعدة البيانات والـ MVC وتطبيق فلاتر؟');">
+                                <input type="hidden" name="id" value="@hall.Id" />
+                                <button type="submit" style="width: 100%; padding: 7px; background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s;">
+                                    <i class="bi bi-trash3-fill"></i> حذف القاعة
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #64748b;">
+                    <i class="bi bi-building-x" style="font-size: 40px;"></i>
+                    <p style="margin-top: 10px;">لا توجد قاعات مسجلة حالياً</p>
+                    <a href="/Account/AddHall" class="btn-add-hall" style="margin-top: 15px;">
+                        <i class="bi bi-plus-circle-fill"></i> إضافة قاعة أولى
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+
+</body>
+</html>

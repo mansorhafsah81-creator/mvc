@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <NuGetAudit>false</NuGetAudit>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\universityBooking.Domain\universityBooking.Domain.csproj" />
+    <ProjectReference Include="..\universityBooking.Application\universityBooking.Application.csproj" />
+  </ItemGroup>
+
+</Project>

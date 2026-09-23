@@ -1,0 +1,408 @@
+
+
+
+
+
+@{
+    ViewData["Title"] = "تفاصيل الحجز - نظام حجز القاعات";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                font-family: 'Cairo', sans-serif;
+            }
+
+            body {
+                background-color: #f4f6f9;
+                display: flex;
+                height: 100vh;
+                overflow: hidden;
+                direction: rtl;
+                text-align: right;
+            }
+
+            /* القائمة الجانبية في أقصى اليمين */
+            .sidebar {
+                width: 260px;
+                background-color: #071933;
+                color: #fff;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                padding: 20px 0;
+                flex-shrink: 0;
+            }
+
+            .sidebar-top .user-profile {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 0 20px 20px 20px;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                margin-bottom: 15px;
+            }
+
+            .user-avatar {
+                width: 40px;
+                height: 40px;
+                background: #e2e8f0;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #333;
+                font-size: 18px;
+            }
+
+            .user-info h4 {
+                font-size: 14px;
+                font-weight: 700;
+                color: #fff;
+            }
+
+            .user-info span {
+                font-size: 11px;
+                color: #a0aec0;
+            }
+
+            .sidebar-menu {
+                list-style: none;
+                padding: 0 10px;
+            }
+
+                .sidebar-menu li {
+                    margin-bottom: 5px;
+                }
+
+                .sidebar-menu a {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 12px 15px;
+                    color: #cbd5e1;
+                    text-decoration: none;
+                    font-size: 13px;
+                    border-radius: 8px;
+                    transition: 0.2s;
+                }
+
+                    .sidebar-menu a:hover, .sidebar-menu li.active a {
+                        background-color: #0b2545;
+                        color: #fff;
+                    }
+
+            /* المحتوى الرئيسي */
+            .main-content {
+                flex: 1;
+                padding: 25px 30px;
+                overflow-y: auto;
+                background-color: #f8f9fa;
+            }
+
+            .page-header {
+                margin-bottom: 5px;
+            }
+
+                .page-header h2 {
+                    font-size: 20px;
+                    font-weight: 700;
+                    color: #111;
+                }
+
+            .breadcrumb-text {
+                font-size: 12px;
+                color: #6c757d;
+                margin-bottom: 25px;
+            }
+
+            .details-container {
+                display: flex;
+                gap: 25px;
+                align-items: flex-start;
+            }
+
+            /* كارت القاعة المصغر في اليسار */
+            .hall-preview-card {
+                width: 270px;
+                background: #fff;
+                border-radius: 12px;
+                border: 1px solid #e2e8f0;
+                overflow: hidden;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+                padding: 15px;
+                flex-shrink: 0;
+            }
+
+            .hall-preview-img {
+                width: 100%;
+                height: 140px;
+                border-radius: 8px;
+                overflow: hidden;
+                background: #e2e8f0;
+                margin-bottom: 12px;
+            }
+
+                .hall-preview-img img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+            .hall-preview-title {
+                font-size: 15px;
+                font-weight: 700;
+                color: #111;
+                text-align: center;
+                margin-bottom: 4px;
+            }
+
+            .hall-preview-location {
+                font-size: 12px;
+                color: #6c757d;
+                text-align: center;
+                margin-bottom: 15px;
+            }
+
+            .hall-preview-meta {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                font-size: 12px;
+                color: #4b5563;
+                border-top: 1px solid #f1f5f9;
+                padding-top: 12px;
+            }
+
+                .hall-preview-meta div {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+
+            /* نموذج تفاصيل الحجز الكبير في الوسط */
+            .booking-form-card {
+                flex: 1;
+                background: #fff;
+                border-radius: 12px;
+                border: 1px solid #e2e8f0;
+                padding: 25px 35px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            }
+
+            .booking-form-title {
+                font-size: 16px;
+                font-weight: 700;
+                color: #111;
+                margin-bottom: 25px;
+                text-align: center;
+                border-bottom: 1px solid #f1f5f9;
+                padding-bottom: 12px;
+            }
+
+            .form-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 0;
+                border-bottom: 1px solid #f8fafc;
+                font-size: 13px;
+            }
+
+                .form-row .label-side {
+                    color: #111;
+                    font-weight: 600;
+                    width: 20%;
+                }
+
+                .form-row .input-side {
+                    width: 75%;
+                }
+
+                .form-row input {
+                    width: 100%;
+                    padding: 6px 10px;
+                    border: 1px solid #cbd5e1;
+                    border-radius: 6px;
+                    font-family: 'Cairo', sans-serif;
+                    font-size: 13px;
+                }
+
+            .status-badge {
+                color: #d97706;
+                background: #fef3c7;
+                padding: 4px 12px;
+                border-radius: 6px;
+                font-size: 12px;
+                font-weight: 600;
+            }
+
+            /* الأزرار بجانب بعضها بحجم متناسق */
+            .actions-bar {
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+                margin-top: 30px;
+            }
+
+            .btn-cancel {
+                width: 140px;
+                padding: 10px;
+                background: #6c757d;
+                color: #fff;
+                border: none;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                transition: 0.2s;
+            }
+
+            .btn-book {
+                width: 140px;
+                padding: 10px;
+                background: #1e3a8a;
+                color: #fff;
+                border: none;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                transition: 0.2s;
+            }
+
+                .btn-cancel:hover, .btn-book:hover {
+                    opacity: 0.9;
+                }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-top">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <div class="user-info">
+                    <h4>حفصة منصور</h4>
+                    <span>طالبة</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="/account/dashboard"><i class="bi bi-house-door"></i> الرئيسية</a>
+                </li>
+                <li>
+                    <a href="/account/halls"><i class="bi bi-grid"></i> القاعات</a>
+                </li>
+                <li>
+                    <a href="/Account/Bookings"><i class="bi bi-calendar-check"></i> حجوزاتي</a>
+                </li>
+                <li>
+                    <a href="#"><i class="bi bi-bell"></i> الإشعارات</a>
+                </li>
+                <li>
+                    <a href="#"><i class="bi bi-person"></i> الملف الشخصي</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-bottom">
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="/account/login"><i class="bi bi-box-arrow-right"></i> تسجيل خروج</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h2>تفاصيل الحجز</h2>
+        </div>
+        <div class="breadcrumb-text">الرئيسية / تفاصيل الحجز</div>
+
+        <!-- بداية نموذج الحجز الموجه بالشكل الصحيح إلى BookingHall في AccountController -->
+        <form asp-controller="Account" asp-action="BookingHall" method="post" class="details-container">
+
+            <div class="hall-preview-card">
+                <div class="hall-preview-img">
+                    <img src="~/images/hall1.jpg" alt="قاعة 101" />
+                </div>
+                <div class="hall-preview-title">قاعة 101</div>
+                <div class="hall-preview-location"><i class="bi bi-building"></i> مبنى أ - الدور الأول</div>
+
+                <div class="hall-preview-meta">
+                    <div><i class="bi bi-calendar-event" style="color: #6c757d;"></i> الأحد 19 مايو 2024</div>
+                    <div><i class="bi bi-clock" style="color: #6c757d;"></i> 10:00 - 12:00</div>
+                    <div><i class="bi bi-people" style="color: #6c757d;"></i> العدد: 45</div>
+                </div>
+            </div>
+
+            <div class="booking-form-card">
+                <div class="booking-form-title">تفاصيل الحجز</div>
+
+                <div class="form-row">
+                    <span class="label-side">القاعة:</span>
+                    <span class="input-side"><input type="text" name="hallNumber" placeholder="أدخل رقم القاعة" required /></span>
+                </div>
+
+                <div class="form-row">
+                    <span class="label-side">المبنى:</span>
+                    <span class="input-side"><input type="text" name="buildingName" placeholder="أدخل اسم المبنى" required /></span>
+                </div>
+
+                <div class="form-row">
+                    <span class="label-side">التاريخ:</span>
+                    <span class="input-side"><input type="text" name="bookingDate" placeholder="2026/MM/DD" value="2026/04/07" required /></span>
+                </div>
+
+                <div class="form-row">
+                    <span class="label-side">الغرض:</span>
+                    <span class="input-side"><input type="text" name="purpose" placeholder="أدخل الغرض من الحجز" required /></span>
+                </div>
+
+                <div class="form-row">
+                    <span class="label-side">الاسم:</span>
+                    <span class="input-side"><input type="text" name="userName" placeholder="أدخل اسمك" required /></span>
+                </div>
+
+                <div class="form-row">
+                    <span class="label-side">الحالة:</span>
+                    <span class="input-side"><span class="status-badge">بانتظار الموافقة</span></span>
+                </div>
+
+                <div class="actions-bar">
+                    <!-- زر إلغاء الحجز ينقلك إلى الواجهة الرئيسية -->
+                    <a href="/account/dashboard" class="btn-cancel">الغاء الحجز</a>
+                    <!-- زر احجز الان يرسل البيانات إلى BookingHall -->
+                    <button type="submit" class="btn-book">احجز الان</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+</body>
+</html>
+

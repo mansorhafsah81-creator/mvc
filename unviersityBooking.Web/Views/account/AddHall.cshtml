@@ -1,0 +1,524 @@
+@{
+    ViewData["Title"] = "إضافة قاعة جديدة - نظام حجز القاعات";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            direction: rtl;
+            text-align: right;
+        }
+
+        .sidebar {
+            width: 260px;
+            background-color: #071933;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px 0;
+            flex-shrink: 0;
+        }
+
+        .sidebar-top .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 20px 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .user-info h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .user-info span {
+            font-size: 11px;
+            color: #a0aec0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0 10px;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 13px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu li.active a {
+            background-color: #0b2545;
+            color: #fff;
+        }
+
+        .sidebar-bottom {
+            padding: 0 10px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 25px 35px;
+            overflow-y: auto;
+            background-color: #f8f9fa;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .page-header h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0b2545;
+        }
+
+        .breadcrumb-text {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 25px;
+        }
+
+        .add-hall-container {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        /* كارت المعاينة الحية */
+        .preview-card {
+            width: 300px;
+            background: #fff;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            padding: 16px;
+            flex-shrink: 0;
+        }
+
+        .preview-img-container {
+            width: 100%;
+            height: 170px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #e2e8f0;
+            margin-bottom: 14px;
+            position: relative;
+        }
+
+        .preview-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #dcfce7;
+            color: #15803d;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .preview-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #0b2545;
+            margin-bottom: 6px;
+        }
+
+        .preview-meta {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .preview-details {
+            font-size: 12px;
+            color: #475569;
+            background: #f8fafc;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            min-height: 50px;
+            line-height: 1.5;
+        }
+
+        /* كارت النموذج */
+        .form-card {
+            flex: 1;
+            background: #fff;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+
+        .form-section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0b2545;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 11px 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #111;
+            outline: none;
+            transition: 0.2s;
+            background-color: #fff;
+        }
+
+        .form-control:focus {
+            border-color: #1e3a8a;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            height: 90px;
+        }
+
+        /* اختيار الصور الجاهزة */
+        .preset-images-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 8px;
+            margin-bottom: 15px;
+        }
+
+        .preset-img-item {
+            position: relative;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .preset-img-item.active {
+            border-color: #1e3a8a;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.25);
+        }
+
+        .preset-img-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preset-img-item .preset-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            font-size: 10px;
+            text-align: center;
+            padding: 2px 0;
+        }
+
+        .actions-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .btn-submit {
+            flex: 2;
+            padding: 12px;
+            background: #1e3a8a;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit:hover {
+            background-color: #172554;
+        }
+
+        .btn-back {
+            flex: 1;
+            padding: 12px;
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .btn-back:hover {
+            background: #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-top">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <div class="user-info">
+                    <h4>حفصة منصور</h4>
+                    <span>طالبة</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="/Account/Dashboard"><i class="bi bi-house-door"></i> الرئيسية</a>
+                </li>
+                <li class="active">
+                    <a href="/Account/Halls"><i class="bi bi-grid"></i> القاعات</a>
+                </li>
+                <li>
+                    <a href="/Account/Bookings"><i class="bi bi-calendar-check"></i> حجوزاتي</a>
+                </li>
+                <li>
+                    <a href="#"><i class="bi bi-bell"></i> الإشعارات</a>
+                </li>
+                <li>
+                    <a href="#"><i class="bi bi-person"></i> الملف الشخصي</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-bottom">
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="/Account/Login"><i class="bi bi-box-arrow-right"></i> تسجيل خروج</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h2>إضافة قاعة جديدة</h2>
+            <a href="/Account/Halls" class="btn-back" style="max-width: 140px; padding: 8px 14px;">
+                <i class="bi bi-arrow-right"></i> عودة للقاعات
+            </a>
+        </div>
+        <div class="breadcrumb-text">القاعات / إضافة قاعة جديدة متزامنة مع تطبيق فلاتر</div>
+
+        <div class="add-hall-container">
+
+            <!-- كارت المعاينة الحية -->
+            <div class="preview-card">
+                <div style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 10px;">
+                    <i class="bi bi-eye"></i> معاينة شكل القاعة في الواجهات
+                </div>
+                <div class="preview-img-container">
+                    <img id="livePreviewImg" src="/images/hall1.jpg" alt="معاينة القاعة" onerror="this.src='/images/hall1.jpg';" />
+                    <span class="preview-badge"><i class="bi bi-check-circle-fill"></i> متاحة</span>
+                </div>
+                <div class="preview-title" id="livePreviewName">قاعة 505</div>
+                <div class="preview-meta" id="livePreviewBuilding"><i class="bi bi-building"></i> مبنى الهندسة - الدور الخامس</div>
+                <div class="preview-meta" id="livePreviewCapacity"><i class="bi bi-people"></i> السعة: 70 شخص</div>
+                <div class="preview-details" id="livePreviewDetails">قاعة دراسية مجهزة بأحدث وسائل العرض الذكية والإنترنت عالي السرعة.</div>
+            </div>
+
+            <!-- كارت نموذج الإضافة -->
+            <div class="form-card">
+                <div class="form-section-title">
+                    <i class="bi bi-plus-circle-fill" style="color: #1e3a8a;"></i> بيانات القاعة الجديدة
+                </div>
+
+                <form asp-controller="Account" asp-action="AddHall" method="post" enctype="multipart/form-data">
+                    
+                    <div class="form-group">
+                        <label><i class="bi bi-tag"></i> اسم أو رقم القاعة *</label>
+                        <input type="text" name="name" id="inputName" class="form-control" placeholder="مثال: قاعة 505 - المؤتمرات" value="قاعة 505" required oninput="updateLivePreview()" />
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="bi bi-building"></i> المبنى والدور *</label>
+                        <input type="text" name="building" id="inputBuilding" class="form-control" placeholder="مثال: مبنى الهندسة - الدور الخامس" value="مبنى الهندسة - الدور الخامس" required oninput="updateLivePreview()" />
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="bi bi-people"></i> السعة القصوى (عدد الأشخاص) *</label>
+                        <input type="number" name="capacity" id="inputCapacity" class="form-control" placeholder="أدخل سعة القاعة" value="70" min="1" required oninput="updateLivePreview()" />
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="bi bi-card-text"></i> تفاصيل ومميزات القاعة</label>
+                        <textarea name="details" id="inputDetails" class="form-control" placeholder="اكتب وصفاً مختصراً للقاعة ومعداتها..." oninput="updateLivePreview()">قاعة دراسية مجهزة بأحدث وسائل العرض الذكية والإنترنت عالي السرعة.</textarea>
+                    </div>
+
+                        <!-- اختيار صورة القاعة -->
+                        <div class="form-group">
+                            <label><i class="bi bi-image"></i> صورة القاعة (اختر من الصور الجاهزة أو ارفع صورة)</label>
+                            <input type="hidden" name="imagePreset" id="imagePresetInput" value="assets/hall_101.png" />
+                            <input type="hidden" name="imageBase64" id="imageBase64Input" value="" />
+
+                            <div class="preset-images-grid">
+                                <div class="preset-img-item active" onclick="selectPreset('assets/hall_101.png', '/images/hall1.jpg', this)">
+                                    <img src="/images/hall1.jpg" alt="صورة 101" />
+                                    <div class="preset-label">نمط 101</div>
+                                </div>
+                                <div class="preset-img-item" onclick="selectPreset('assets/hall_202.png', '/images/hall2.jpg', this)">
+                                    <img src="/images/hall2.jpg" alt="صورة 202" />
+                                    <div class="preset-label">نمط 202</div>
+                                </div>
+                                <div class="preset-img-item" onclick="selectPreset('assets/hall_303.png', '/images/hall3.jpg', this)">
+                                    <img src="/images/hall3.jpg" alt="صورة 303" />
+                                    <div class="preset-label">نمط 303</div>
+                                </div>
+                                <div class="preset-img-item" onclick="selectPreset('images/1.jpg', '/images/1.jpg', this)">
+                                    <img src="/images/1.jpg" alt="صورة المبنى" />
+                                    <div class="preset-label">المبنى</div>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 8px;">
+                                <label style="font-size: 12px; color: #64748b;">أو رفع صورة خاصة من جهازك:</label>
+                                <input type="file" name="imageFile" id="fileUpload" class="form-control" accept="image/*" onchange="previewUploadedImage(this)" />
+                            </div>
+                        </div>
+
+                        <div class="actions-container">
+                            <button type="submit" class="btn-submit">
+                                <i class="bi bi-check-lg"></i> حفظ وإضافة القاعة فوراً
+                            </button>
+                            <a href="/Account/Halls" class="btn-back">إلغاء</a>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+        <script>
+            function selectPreset(presetVal, imgSrc, el) {
+                document.getElementById('imagePresetInput').value = presetVal;
+                document.getElementById('imageBase64Input').value = '';
+                document.getElementById('livePreviewImg').src = imgSrc;
+                document.querySelectorAll('.preset-img-item').forEach(item => item.classList.remove('active'));
+                el.classList.add('active');
+                document.getElementById('fileUpload').value = '';
+            }
+
+            function previewUploadedImage(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('livePreviewImg').src = e.target.result;
+                        document.getElementById('imageBase64Input').value = e.target.result;
+                        document.getElementById('imagePresetInput').value = '';
+                        document.querySelectorAll('.preset-img-item').forEach(item => item.classList.remove('active'));
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+        function updateLivePreview() {
+            var name = document.getElementById('inputName').value || 'قاعة جديدة';
+            var building = document.getElementById('inputBuilding').value || 'المبنى الرئيسي';
+            var capacity = document.getElementById('inputCapacity').value || '50';
+            var details = document.getElementById('inputDetails').value || 'لا توجد تفاصيل إضافية.';
+
+            document.getElementById('livePreviewName').innerText = name;
+            document.getElementById('livePreviewBuilding').innerHTML = '<i class="bi bi-building"></i> ' + building;
+            document.getElementById('livePreviewCapacity').innerHTML = '<i class="bi bi-people"></i> السعة: ' + capacity + ' شخص';
+            document.getElementById('livePreviewDetails').innerText = details;
+        }
+    </script>
+
+</body>
+</html>

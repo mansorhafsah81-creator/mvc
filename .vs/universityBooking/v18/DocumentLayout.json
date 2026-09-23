@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "F:\\\u0645\u0634\u0634\u0631\u0648\u0639\\UniversityBooking_MVC_Backend\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E8D0924A-2BA7-4EBE-B536-4B8A31E00D77}|unviersityBooking.Web\\universityBooking.Web.csproj|f:\\\u0645\u0634\u0634\u0631\u0648\u0639\\universitybooking_mvc_backend\\unviersitybooking.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E8D0924A-2BA7-4EBE-B536-4B8A31E00D77}|unviersityBooking.Web\\universityBooking.Web.csproj|solutionrelative:unviersitybooking.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "F:\\\u0645\u0634\u0634\u0631\u0648\u0639\\UniversityBooking_MVC_Backend\\unviersityBooking.Web\\Program.cs",
+              "RelativeDocumentMoniker": "unviersityBooking.Web\\Program.cs",
+              "ToolTip": "F:\\\u0645\u0634\u0634\u0631\u0648\u0639\\UniversityBooking_MVC_Backend\\unviersityBooking.Web\\Program.cs",
+              "RelativeToolTip": "unviersityBooking.Web\\Program.cs",
+              "ViewState": "AgIAAGQAAAAAAAAAAAApwJcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-21T13:25:49.646Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,248 @@
+@{
+    ViewData["Title"] = "تسجيل الدخول - نظام حجز القاعات الجامعية";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                font-family: 'Cairo', sans-serif;
+            }
+
+            body {
+                background-color: #f4f6f9;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                overflow: hidden;
+                direction: rtl;
+                text-align: right;
+            }
+
+            .login-container {
+                display: flex;
+                width: 900px;
+                height: 550px;
+                background: #fff;
+                border-radius: 16px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+                overflow: hidden;
+            }
+
+            /* قسم الصورة الجانبي */
+            .login-image-side {
+                flex: 1.1;
+                position: relative;
+                background: #e2e8f0;
+            }
+
+                .login-image-side img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+            /* قسم نموذج تسجيل الدخول */
+            .login-form-side {
+                flex: 1;
+                padding: 40px 50px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .login-header {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+
+            .login-logo {
+                font-size: 32px;
+                color: #0b2545;
+                margin-bottom: 8px;
+            }
+
+            .login-header h2 {
+                font-size: 18px;
+                font-weight: 700;
+                color: #0b2545;
+            }
+
+            .form-title {
+                font-size: 14px;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 20px;
+            }
+
+            .form-group {
+                margin-bottom: 16px;
+            }
+
+                .form-group label {
+                    display: block;
+                    font-size: 12px;
+                    color: #555;
+                    margin-bottom: 6px;
+                }
+
+            .input-box {
+                position: relative;
+            }
+
+                .input-box input {
+                    width: 100%;
+                    padding: 10px 15px 10px 40px;
+                    border: 1px solid #ced4da;
+                    border-radius: 8px;
+                    font-size: 13px;
+                    outline: none;
+                    transition: 0.2s;
+                    background: #fff;
+                }
+
+                    .input-box input:focus {
+                        border-color: #1d4ed8;
+                        box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
+                    }
+
+                .input-box i {
+                    position: absolute;
+                    left: 12px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    color: #888;
+                    font-size: 14px;
+                }
+
+            .form-options {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 12px;
+                margin-bottom: 25px;
+            }
+
+                .form-options label {
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                    color: #555;
+                    cursor: pointer;
+                }
+
+                .form-options a {
+                    color: #1d4ed8;
+                    text-decoration: none;
+                }
+
+                    .form-options a:hover {
+                        text-decoration: underline;
+                    }
+
+            .submit-btn {
+                width: 100%;
+                padding: 11px;
+                background: #0b2545;
+                border: none;
+                border-radius: 8px;
+                color: #fff;
+                font-size: 14px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: 0.2s;
+                margin-bottom: 20px;
+            }
+
+                .submit-btn:hover {
+                    background: #1d3557;
+                }
+
+            .register-link {
+                text-align: center;
+                font-size: 12px;
+                color: #666;
+            }
+
+                .register-link a {
+                    color: #1d4ed8;
+                    text-decoration: none;
+                    font-weight: 600;
+                }
+
+                    .register-link a:hover {
+                        text-decoration: underline;
+                    }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <!-- قسم الصورة على اليسار -->
+        <div class="login-image-side">
+            <img src="~/images/1.jpg" alt="مبنى الجامعة">
+        </div>
+
+        <!-- قسم النموذج على اليمين -->
+        <div class="login-form-side">
+            <div class="login-header">
+                <div class="login-logo">
+                    <i class="bi bi-hexagon"></i>
+                </div>
+                <h2>نظام حجز القاعات الجامعية</h2>
+            </div>
+
+            <div class="form-title">تسجيل الدخول</div>
+
+            <div style="font-size: 11px; color: #1d4ed8; background: #eff6ff; border: 1px solid #bfdbfe; padding: 8px 12px; border-radius: 8px; margin-bottom: 16px; text-align: center;">
+                💡 <b>حساب تجريبي:</b> admin@university.edu / 123456 <br/> (أو اضغط زر تسجيل الدخول مباشرة للدخول فوراً)
+            </div>
+
+            <form action="/Account/Login" method="post">
+                <div class="form-group">
+                    <label>البريد الإلكتروني أو اسم المستخدم</label>
+                    <div class="input-box">
+                        <input type="text" name="email" value="admin@university.edu" placeholder="أدخل بريدك الإلكتروني">
+                        <i class="bi bi-person"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>كلمة المرور</label>
+                    <div class="input-box">
+                        <input type="password" name="password" value="123456" placeholder="أدخل كلمة المرور">
+                        <i class="bi bi-lock"></i>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <label>
+                        <input type="checkbox" checked> تذكرني
+                    </label>
+                    <a href="#">نسيت كلمة المرور؟</a>
+                </div>
+
+                <button type="submit" class="submit-btn">تسجيل الدخول</button>
+
+                <div class="register-link">
+                    ليس لديك حساب؟ <a href="/Account/Register">إنشاء حساب</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
+

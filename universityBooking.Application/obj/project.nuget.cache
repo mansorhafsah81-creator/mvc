@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "RAMd7XQj+Ps=",
+  "success": true,
+  "projectFilePath": "F:\\مششروع\\UniversityBooking_MVC_Backend\\universityBooking.Application\\universityBooking.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\TOPLAPTOP\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.0\\microsoft.extensions.dependencyinjection.abstractions.10.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
